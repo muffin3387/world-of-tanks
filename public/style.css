@@ -1,0 +1,521 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    overflow: hidden;
+}
+
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Title Screen */
+#title-screen {
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%23000"/><rect fill="%23111" opacity="0.1" width="1920" height="1080"/></svg>');
+    background-size: cover;
+}
+
+.title-content {
+    text-align: center;
+    z-index: 10;
+}
+
+.title-content h1 {
+    font-size: 72px;
+    margin-bottom: 40px;
+    text-shadow: 0 0 20px rgba(255, 100, 0, 0.8);
+    letter-spacing: 8px;
+    color: #ff6400;
+}
+
+.player-info {
+    margin-bottom: 40px;
+    font-size: 18px;
+}
+
+.menu-button {
+    display: block;
+    width: 300px;
+    padding: 15px 30px;
+    margin: 10px auto;
+    font-size: 18px;
+    background: linear-gradient(135deg, #ff6400, #ff8c00);
+    border: 2px solid #ff6400;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.menu-button:hover {
+    background: linear-gradient(135deg, #ff8c00, #ffa500);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 100, 0, 0.8);
+}
+
+/* Garage Screen */
+#garage-screen {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.garage-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 2px solid #ff6400;
+}
+
+.country-tab {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background: #333;
+    border: 2px solid #666;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.country-tab.active {
+    background: #ff6400;
+    border-color: #ff6400;
+    color: #000;
+}
+
+.player-info-garage {
+    font-size: 16px;
+    text-align: right;
+}
+
+.garage-content {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 180px);
+    padding: 20px 40px;
+    gap: 40px;
+}
+
+.garage-tanks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.garage-tank-item {
+    padding: 15px;
+    background: #2a2a3e;
+    border: 2px solid #555;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 5px;
+}
+
+.garage-tank-item:hover {
+    border-color: #ff6400;
+    background: #3a3a4e;
+}
+
+.garage-tank-item.selected {
+    border-color: #ff6400;
+    background: #4a4a5e;
+}
+
+.garage-details {
+    flex: 1;
+    padding: 20px;
+    background: #2a2a3e;
+    border: 2px solid #555;
+    border-radius: 5px;
+    overflow-y: auto;
+}
+
+#tank-details h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #ff6400;
+}
+
+#tank-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.tank-image {
+    width: 100%;
+    height: 200px;
+    background: #1a1a2e;
+    margin-bottom: 20px;
+    border: 2px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.tank-stats {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.tank-stats p {
+    margin: 8px 0;
+}
+
+.upgrade-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.upgrade-buttons button {
+    padding: 10px;
+    background: #ff6400;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.upgrade-buttons button:hover {
+    background: #ff8c00;
+}
+
+.select-tank-button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #00aa00, #00ff00);
+    border: 2px solid #00aa00;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.select-tank-button:hover {
+    background: linear-gradient(135deg, #00ff00, #00ffaa);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+.back-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: #666;
+    border: 2px solid #999;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.back-button:hover {
+    background: #888;
+    border-color: #fff;
+}
+
+/* Shop Screen */
+#shop-screen {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.shop-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 2px solid #ff6400;
+}
+
+.player-info-shop {
+    font-size: 16px;
+    text-align: right;
+}
+
+.shop-content {
+    width: 100%;
+    height: calc(100% - 160px);
+    padding: 20px 40px;
+    overflow-y: auto;
+}
+
+.shop-section {
+    margin-bottom: 30px;
+}
+
+.shop-section h3 {
+    margin-bottom: 15px;
+    color: #ff6400;
+    font-size: 18px;
+}
+
+.shop-tank {
+    padding: 15px;
+    background: #2a2a3e;
+    border: 2px solid #555;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.tech-tree {
+    display: flex;
+    gap: 30px;
+}
+
+.tree-nation {
+    flex: 1;
+}
+
+.tree-nation h4 {
+    margin-bottom: 10px;
+    color: #ff8c00;
+}
+
+.tree-tanks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tree-tank-item {
+    padding: 10px;
+    background: #333;
+    border: 2px solid #555;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 3px;
+}
+
+.tree-tank-item:hover {
+    border-color: #ff6400;
+    background: #3a3a4e;
+}
+
+/* Battle Screen */
+#battle-screen {
+    background: #000;
+    justify-content: center;
+    padding: 0;
+}
+
+#battle-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.battle-ui {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.battle-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.left-hud {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 2px solid #ff6400;
+    border-radius: 5px;
+    min-width: 250px;
+}
+
+.hp-bar {
+    width: 100%;
+    height: 30px;
+    background: #333;
+    border: 2px solid #666;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.hp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+    width: 100%;
+    transition: width 0.3s;
+}
+
+.ammo-info, .cooldown-info {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.minimap-container {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #ff6400;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#minimap {
+    display: block;
+    width: 150px;
+    height: 150px;
+}
+
+.right-hud {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 2px solid #ff6400;
+    border-radius: 5px;
+    text-align: right;
+}
+
+#battle-info p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.pause-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 4px solid #ff6400;
+    padding: 40px;
+    text-align: center;
+    z-index: 100;
+    border-radius: 10px;
+    pointer-events: all;
+}
+
+.pause-menu.hidden {
+    display: none;
+}
+
+.pause-content h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #ff6400;
+}
+
+.pause-content button {
+    display: block;
+    width: 250px;
+    padding: 15px;
+    margin: 10px auto;
+    font-size: 18px;
+    background: #ff6400;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pause-content button:hover {
+    background: #ff8c00;
+    transform: scale(1.05);
+}
+
+/* Result Screen */
+#result-screen {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.result-content {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border: 4px solid #ff6400;
+    border-radius: 10px;
+}
+
+#result-title {
+    font-size: 48px;
+    margin-bottom: 30px;
+    color: #ff6400;
+}
+
+.result-stats {
+    font-size: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+    display: inline-block;
+}
+
+.result-stats p {
+    margin: 15px 0;
+}
+
+.result-button {
+    padding: 15px 40px;
+    font-size: 18px;
+    background: #ff6400;
+    border: 2px solid #ff6400;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.result-button:hover {
+    background: #ff8c00;
+    transform: scale(1.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ff6400;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff8c00;
+}
