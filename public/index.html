@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World of Tanks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Title Screen -->
+        <div id="title-screen" class="screen active">
+            <div class="title-content">
+                <h1>WORLD OF TANKS</h1>
+                <div class="player-info">
+                    <p>Level: <span id="title-level">1</span></p>
+                    <p>Money: <span id="title-money">0</span></p>
+                </div>
+                <button class="menu-button" onclick="startBattle()">戦闘開始</button>
+                <button class="menu-button" onclick="showGarage()">ガレージ</button>
+                <button class="menu-button" onclick="showShop()">ショップ</button>
+                <button class="menu-button" onclick="resetGame()">初期化</button>
+            </div>
+        </div>
+
+        <!-- Garage Screen -->
+        <div id="garage-screen" class="screen">
+            <div class="garage-header">
+                <button class="country-tab active" data-country="germany">ドイツ</button>
+                <button class="country-tab" data-country="ussr">ソ連</button>
+                <button class="country-tab" data-country="usa">アメリカ</button>
+                <div class="player-info-garage">
+                    <p>Level: <span id="garage-level">1</span></p>
+                    <p>Money: <span id="garage-money">0</span></p>
+                </div>
+            </div>
+            
+            <div class="garage-content">
+                <div id="garage-tanks" class="garage-tanks"></div>
+                <div class="garage-details">
+                    <div id="tank-details">
+                        <h3 id="tank-name">戦車を選択してください</h3>
+                        <p id="tank-description"></p>
+                        <div class="tank-image" id="tank-image"></div>
+                        <div class="tank-stats">
+                            <p>装甲: <span id="stat-armor">0</span></p>
+                            <p>HP: <span id="stat-hp">0</span></p>
+                            <p>速度: <span id="stat-speed">0</span></p>
+                            <p>火力: <span id="stat-firepower">0</span></p>
+                            <p>装備: <span id="tank-equipment">なし</span></p>
+                        </div>
+                        <div class="upgrade-buttons">
+                            <button onclick="upgradeTank('cannon')">砲身強化 (3500)</button>
+                            <button onclick="upgradeTank('chassis')">車体強化 (3500)</button>
+                            <button onclick="upgradeTank('engine')">エンジン強化 (3500)</button>
+                        </div>
+                        <button id="select-tank-btn" class="select-tank-button" onclick="selectTankForBattle()">この戦車で出撃する</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="back-button" onclick="backToTitle()">タイトルに戻る</button>
+        </div>
+
+        <!-- Shop Screen -->
+        <div id="shop-screen" class="screen">
+            <div class="shop-header">
+                <h2>ショップ</h2>
+                <div class="player-info-shop">
+                    <p>Level: <span id="shop-level">1</span></p>
+                    <p>Money: <span id="shop-money">0</span></p>
+                </div>
+            </div>
+            
+            <div class="shop-content">
+                <div class="shop-section">
+                    <h3>本日の一機 (150000)</h3>
+                    <div id="shop-daily-tank" class="shop-tank"></div>
+                </div>
+                
+                <div class="shop-section">
+                    <h3>開発ツリー</h3>
+                    <div class="tech-tree">
+                        <div class="tree-nation">
+                            <h4>ドイツ</h4>
+                            <div id="germany-tree" class="tree-tanks"></div>
+                        </div>
+                        <div class="tree-nation">
+                            <h4>ソ連</h4>
+                            <div id="ussr-tree" class="tree-tanks"></div>
+                        </div>
+                        <div class="tree-nation">
+                            <h4>アメリカ</h4>
+                            <div id="usa-tree" class="tree-tanks"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="back-button" onclick="backToTitle()">タイトルに戻る</button>
+        </div>
+
+        <!-- Battle Screen -->
+        <div id="battle-screen" class="screen">
+            <div class="battle-ui">
+                <canvas id="battle-canvas" width="1200" height="800"></canvas>
+                
+                <!-- HUD -->
+                <div class="battle-hud">
+                    <div class="left-hud">
+                        <div class="hp-bar">
+                            <div id="player-hp-fill" class="hp-fill"></div>
+                        </div>
+                        <div id="player-ammo" class="ammo-info">
+                            弾: <span id="ammo-count">30</span> | 機銃: <span id="mg-ammo">200</span>
+                        </div>
+                        <div id="repair-kit-cooldown" class="cooldown-info">修復キット: 準備完了</div>
+                    </div>
+                    
+                    <div class="minimap-container">
+                        <canvas id="minimap" width="150" height="150"></canvas>
+                    </div>
+                    
+                    <div class="right-hud">
+                        <div id="battle-info">
+                            <p>敵: <span id="enemy-count">2</span></p>
+                            <p>味方: <span id="ally-count">2</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pause Menu -->
+                <div id="pause-menu" class="pause-menu hidden">
+                    <div class="pause-content">
+                        <h2>一時停止</h2>
+                        <button onclick="resumeBattle()">戦闘再開</button>
+                        <button onclick="backToTitle()">タイトルに戻る</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Battle Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="result-content">
+                <h2 id="result-title">戦闘終了</h2>
+                <div class="result-stats">
+                    <p>撃破数: <span id="result-kills">0</span></p>
+                    <p>ダメージ: <span id="result-damage">0</span></p>
+                    <p>獲得資金: <span id="result-money">0</span></p>
+                    <p>獲得経験値: <span id="result-exp">0</span></p>
+                </div>
+                <button class="result-button" onclick="backToTitle()">タイトルに戻る</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
